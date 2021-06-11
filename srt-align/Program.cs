@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Collections.Generic;
 
 namespace srt_align
 {
@@ -6,7 +8,9 @@ namespace srt_align
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+
         }
     }
+
+    /*args list to implement:*/
 }

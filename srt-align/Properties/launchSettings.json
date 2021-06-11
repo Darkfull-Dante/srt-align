@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "srt-align": {
+      "commandName": "Project",
+      "workingDirectory": "Z:\\srt-align test\\"
+    }
+  }
+}
