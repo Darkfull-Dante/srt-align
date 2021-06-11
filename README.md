@@ -13,4 +13,4 @@ SRT Align is a CLI software that can edit timestamp in an SRT file (SubRip) to a
 ## Contributing
 
 ## Licence
-[GPL3](LICENCE)
+[GPL3](blob/master/LICENSE)
