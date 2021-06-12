@@ -2,7 +2,6 @@
   "profiles": {
     "srt-align": {
       "commandName": "Project",
-      "commandLineArgs": "Terrfied(2017).fr.srt",
       "workingDirectory": "Z:\\srt-align test\\"
     }
   }
