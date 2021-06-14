@@ -21,12 +21,10 @@ namespace srt_align
         /// <param name="textList">List of subtitles lines</param>
         public SubtitleElement(int index, TimeStamp start, TimeStamp end, List<string> textList)
         {
-
             Index = index;
             Start = start;
             End = end;
             TextList = textList;
-
         }
 
         public SubtitleElement(int index) : this(index, TimeStamp.Parse("00:00:00,000"), TimeStamp.Parse("00:00:00,000"), new List<string>()) { }
@@ -84,6 +82,10 @@ namespace srt_align
             return Index.CompareTo(element.Index);
         }
 
+        /// <summary>
+        /// add the string to the textList property
+        /// </summary>
+        /// <param name="lineOfText">the line of text to add</param>
         public void AddLineOfText(string lineOfText)
         {
             textList.Add(lineOfText);

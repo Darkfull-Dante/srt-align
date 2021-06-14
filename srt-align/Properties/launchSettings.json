@@ -2,7 +2,7 @@
   "profiles": {
     "srt-align": {
       "commandName": "Project",
-      "commandLineArgs": "--linear=00:00:02,000 --overwrite Terrified(2017).fr.stt",
+      "commandLineArgs": "-v Terrified(2017).fr.srt",
       "workingDirectory": "Z:\\srt-align test\\"
     }
   }

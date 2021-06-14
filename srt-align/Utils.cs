@@ -61,6 +61,11 @@ namespace srt_align
             return result;
         }
 
+        /// <summary>
+        /// method to write an srt file to memory
+        /// </summary>
+        /// <param name="list">the subtitle element list to write in the .srt file</param>
+        /// <param name="outputLocation">the location where to write the file</param>
         static public void SrtWrite(List<SubtitleElement> list, string outputLocation)
         {
             using (StreamWriter fileOut = new StreamWriter(outputLocation, false))
