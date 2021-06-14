@@ -21,42 +21,61 @@ namespace srt_align
             int index = 0;
             int subtitleCount = 0;
 
-            //create the streamReader
-            using (StreamReader fileIn = new StreamReader(fileLocation))
+            if (!File.Exists(fileLocation))
             {
-                //read the text file
-                while ((currentLine = fileIn.ReadLine()) != null)
+                Console.Error.WriteLine("The file provided does not exist");
+                Environment.Exit(0);
+            }
+
+            //create the streamReader
+            try
+            {
+                using (StreamReader fileIn = new StreamReader(fileLocation))
                 {
-                    if (currentLine != "")
-                    {
 
-                        switch (elementIndex)
+                    //read the text file
+                    while ((currentLine = fileIn.ReadLine()) != null)
+                    {
+                        if (currentLine != "")
                         {
-                            case 0:
-                                index = int.Parse(currentLine);
-                                result.Add(new SubtitleElement(index));
-                                break;
 
-                            case 1:
-                                result[subtitleCount].Start = TimeStamp.Parse(currentLine.Substring(0, 12));
-                                result[subtitleCount].End = TimeStamp.Parse(currentLine.Substring(17, 12));
-                                break;
+                            switch (elementIndex)
+                            {
+                                case 0:
+                                    index = int.Parse(currentLine);
+                                    result.Add(new SubtitleElement(index));
+                                    break;
 
-                            default:
-                                result[subtitleCount].TextList.Add(currentLine);
-                                break;
+                                case 1:
+                                    result[subtitleCount].Start = TimeStamp.Parse(currentLine.Substring(0, 12));
+                                    result[subtitleCount].End = TimeStamp.Parse(currentLine.Substring(17, 12));
+                                    break;
+
+                                default:
+                                    result[subtitleCount].TextList.Add(currentLine);
+                                    break;
+                            }
+
+                            elementIndex++;
+
                         }
-
-                        elementIndex++;
-
-                    }
-                    else
-                    {
-                        elementIndex = 0;
-                        subtitleCount++;
+                        else
+                        {
+                            elementIndex = 0;
+                            subtitleCount++;
+                        }
                     }
                 }
             }
+            catch (UnauthorizedAccessException)
+            {
+                Console.Error.WriteLine("Access denied on the input file. Please run as adminstrator");
+            }
+            catch (Exception)
+            {
+
+            }
+            
 
             return result;
         }
@@ -68,13 +87,22 @@ namespace srt_align
         /// <param name="outputLocation">the location where to write the file</param>
         static public void SrtWrite(List<SubtitleElement> list, string outputLocation)
         {
-            using (StreamWriter fileOut = new StreamWriter(outputLocation, false))
+            try
             {
-                foreach (SubtitleElement subtitle in list)
+                using (StreamWriter fileOut = new StreamWriter(outputLocation, false))
                 {
-                    fileOut.WriteLine(subtitle);
+                    foreach (SubtitleElement subtitle in list)
+                    {
+                        fileOut.WriteLine(subtitle);
+                    }
                 }
             }
+            catch (UnauthorizedAccessException)
+            {
+                Console.Error.WriteLine("Access denied on the output file. Please run as adminstrator");
+                throw;
+            }
+            
         }
 
     }

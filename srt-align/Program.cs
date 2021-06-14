@@ -166,10 +166,10 @@ namespace srt_align
         /// <returns>returns an absolute path for the file</returns>
         static string FileLocationFormater(string locationArg)
         {
-            Regex driveLetterTest = new Regex("^[a-zA-Z]:\\$");
+            Regex driveLetterTest = new Regex(@"^[a-zA-Z]:\\");
 
             //check if location argument is already an absolute path
-            if (driveLetterTest.IsMatch(locationArg.Substring(0, 3)))
+            if (driveLetterTest.IsMatch(locationArg))
             {
                 return locationArg;
             }
