@@ -2,7 +2,7 @@
   "profiles": {
     "srt-align": {
       "commandName": "Project",
-      "commandLineArgs": "-h",
+      "commandLineArgs": "--version",
       "workingDirectory": "Z:\\srt-align test\\"
     }
   }

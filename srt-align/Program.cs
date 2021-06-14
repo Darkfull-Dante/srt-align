@@ -28,7 +28,7 @@ namespace srt_align
             try
             {
                 //check if 1 or 2 file path where provided
-                if (args[argsCount - 2].Substring(0,1) == "-" && args[argsCount - 1] != "-")
+                if (args[argsCount - 2].Substring(0,1) == "-" && args[argsCount - 1] == "-")
                 {
                     input = FileLocationFormater(args[args.Length - 2]);
                     output = FileLocationFormater(args[args.Length - 1]);
@@ -37,13 +37,13 @@ namespace srt_align
                 else if (args[argsCount - 2].Substring(0, 1) == "-" && args[argsCount - 1] != "-")
                 {
                     input = FileLocationFormater(args[args.Length - 1]);
+                    output = FileLocationFormater(Path.GetFileNameWithoutExtension(input) + "-edited" + Path.GetExtension(input));
                     removeFromArray = 1;
                 }
             }
             catch (IndexOutOfRangeException)
             {
-                Help();
-                Environment.Exit(0);
+
             }
 
             //remove file location from the argument list to prepare for option settings
@@ -65,33 +65,42 @@ namespace srt_align
             }
 
             char mode = ModeSelect(param_Linear, param_Shift);
+            List<SubtitleElement> subtitlesList = new List<SubtitleElement>();
+
+            if (mode == 'l' || mode == 's')
+            {
+                subtitlesList = Utils.SrtRead(input);
+            }
 
             //make the update to the file according to the selection
             switch (mode)
             {
                 case 'l':
+                    LinearUpdate(ref subtitlesList, param_Linear);
                     break;
 
                 case 's':
+                    ShiftUpdate(ref subtitlesList, param_Shift);
                     break;
 
                 case 'n':
-                    Console.Error.WriteLine();
+                    Console.Error.WriteLine("No alignment method was selected. Please check srt-align --help for more details");
                     Environment.Exit(0);
                     break;
 
                 case 'b':
-                    Console.Error.WriteLine();
+                    Console.Error.WriteLine("Both alignment methods were selected at the same time. Please check srt-align --help for more details");
                     Environment.Exit(0);
                     break;
                 
                 default:
-                    Console.Error.WriteLine();
+                    Console.Error.WriteLine("An error occured. Please verify srt-align --help for proper uses");
                     Environment.Exit(0);
                     break;
             }
 
             //save the file
+            Utils.SrtWrite(subtitlesList, output);
 
         }
 
@@ -100,7 +109,7 @@ namespace srt_align
         /// </summary>
         static void Version()
         {
-            Console.WriteLine("srt-align 0.1");
+            Console.WriteLine("srt-align 0.2");
             Console.WriteLine("Copyright (C) 2021 Felix Cusson");
             Console.WriteLine("Licence GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>");
             Console.WriteLine("This is free software: you are free to change and redistribute it.");
@@ -232,7 +241,7 @@ namespace srt_align
                     break;
 
                 case "overwrite":
-                    param_Override = true;
+                    param_Overwrite = true;
                     break;
 
                 case "version":
@@ -298,7 +307,7 @@ namespace srt_align
                     break;
 
                 case "o":
-                    param_Override = true;
+                    param_Overwrite = true;
                     break;
 
                 case "v":
@@ -345,7 +354,27 @@ namespace srt_align
 
             return result;
         }
+
+        static void LinearUpdate(ref List<SubtitleElement> list, TimeStamp linearValue)
+        {
+            foreach (SubtitleElement subtitle in list)
+            {
+                subtitle.Start += linearValue;
+                subtitle.End += linearValue;
+            }
+        }
+
+        static void ShiftUpdate(ref List<SubtitleElement> list, float shiftValue)
+        {
+            foreach (SubtitleElement subtitle in list)
+            {
+                subtitle.Start *= shiftValue;
+                subtitle.End *= shiftValue;
+            }
+        }
     }
+
+    
 }
 
     /*args list to implement:
@@ -355,4 +384,3 @@ namespace srt_align
         -h && --help        -> help file
         -v && --version     -> version check
     */
-}

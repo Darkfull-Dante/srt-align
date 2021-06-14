@@ -69,7 +69,7 @@ namespace srt_align
                 result = result + lineOfText + "\n";
             }
 
-            return result + "\n";
+            return result;
         }
         
         /// <summary>

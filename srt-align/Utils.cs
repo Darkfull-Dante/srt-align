@@ -61,5 +61,16 @@ namespace srt_align
             return result;
         }
 
+        static public void SrtWrite(List<SubtitleElement> list, string outputLocation)
+        {
+            using (StreamWriter fileOut = new StreamWriter(outputLocation, false))
+            {
+                foreach (SubtitleElement subtitle in list)
+                {
+                    fileOut.WriteLine(subtitle);
+                }
+            }
+        }
+
     }
 }
