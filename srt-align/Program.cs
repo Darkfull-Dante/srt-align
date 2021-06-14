@@ -24,33 +24,53 @@ namespace srt_align
             string output = "";
             int removeFromArray = 0;
 
+            //check how many filepath argument where provided
+            for (int i = argsCount; i --> 0;)
+            {
+
+                string currentArg = args[i];
+
+                if (currentArg[0] != '-')
+                {
+                    if (Path.GetExtension(currentArg) == ".srt")
+                    {
+                        removeFromArray++;
+                    }
+                    else
+                    {
+                        Console.Error.WriteLine("File provided is invalid. The extension must be a .srt file");
+                        Environment.Exit(0);
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+
             //check the arguments for input and output
-            try
+            if (removeFromArray == 1)
             {
-                //check if 1 or 2 file path where provided
-                if (args[argsCount - 2].Substring(0,1) == "-" && args[argsCount - 1] == "-")
-                {
-                    input = FileLocationFormater(args[args.Length - 2]);
-                    output = FileLocationFormater(args[args.Length - 1]);
-                    removeFromArray = 2;
-                }
-                else if (args[argsCount - 2].Substring(0, 1) == "-" && args[argsCount - 1] != "-")
-                {
-                    input = FileLocationFormater(args[args.Length - 1]);
-                    output = FileLocationFormater(Path.GetFileNameWithoutExtension(input) + "-edited" + Path.GetExtension(input));
-                    removeFromArray = 1;
-                }
+                input = FileLocationFormater(args[argsCount - 1]);
+                output = FileLocationFormater(Path.GetFileNameWithoutExtension(input) + "-edited" + Path.GetExtension(input));
             }
-            catch (IndexOutOfRangeException)
+            else if (removeFromArray == 2)
             {
-
+                input = FileLocationFormater(args[argsCount - 2]);
+                output = FileLocationFormater(args[argsCount - 1]);
             }
-
+   
             //remove file location from the argument list to prepare for option settings
-            Array.Resize(ref args, args.Length - removeFromArray);
+            Array.Resize(ref args, argsCount - removeFromArray);
 
             //check parameters provided
             GetOpt(args);
+
+            //make output equal to input if --overwrite is on
+            if (param_Overwrite)
+            {
+                output = input;
+            }
 
             if (param_Version)
             {
@@ -109,7 +129,7 @@ namespace srt_align
         /// </summary>
         static void Version()
         {
-            Console.WriteLine("srt-align 0.2");
+            Console.WriteLine("srt-align 0.3");
             Console.WriteLine("Copyright (C) 2021 Felix Cusson");
             Console.WriteLine("Licence GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>");
             Console.WriteLine("This is free software: you are free to change and redistribute it.");
