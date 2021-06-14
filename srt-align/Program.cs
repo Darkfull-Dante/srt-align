@@ -9,17 +9,36 @@ namespace srt_align
     {
 
         static TimeStamp param_Linear;
-        static float param_Shift;
-        static bool param_Override = false;
+        static float param_Shift = 99999;
+        static bool param_Overwrite = false;
         static bool param_Version = false;
         static bool param_Help = false;
 
+        const float DEFAULT_SHIFT_VALUE = 99999;
+
         static void Main(string[] args)
         {
-            //take the file location from the last argument present
+
+            int argsCount = args.Length;
+            string input = "";
+            string output = "";
+            int removeFromArray = 0;
+
+            //check the arguments for input and output
             try
             {
-                string fileLocation = FileLocationFormater(args[args.Length - 1]);
+                //check if 1 or 2 file path where provided
+                if (args[argsCount - 2].Substring(0,1) == "-" && args[argsCount - 1] != "-")
+                {
+                    input = FileLocationFormater(args[args.Length - 2]);
+                    output = FileLocationFormater(args[args.Length - 1]);
+                    removeFromArray = 2;
+                }
+                else if (args[argsCount - 2].Substring(0, 1) == "-" && args[argsCount - 1] != "-")
+                {
+                    input = FileLocationFormater(args[args.Length - 1]);
+                    removeFromArray = 1;
+                }
             }
             catch (IndexOutOfRangeException)
             {
@@ -28,7 +47,7 @@ namespace srt_align
             }
 
             //remove file location from the argument list to prepare for option settings
-            Array.Resize(ref args, args.Length - 1);
+            Array.Resize(ref args, args.Length - removeFromArray);
 
             //check parameters provided
             GetOpt(args);
@@ -41,8 +60,39 @@ namespace srt_align
 
             if (param_Help)
             {
+                Help();
                 Environment.Exit(0);
             }
+
+            char mode = ModeSelect(param_Linear, param_Shift);
+
+            //make the update to the file according to the selection
+            switch (mode)
+            {
+                case 'l':
+                    break;
+
+                case 's':
+                    break;
+
+                case 'n':
+                    Console.Error.WriteLine();
+                    Environment.Exit(0);
+                    break;
+
+                case 'b':
+                    Console.Error.WriteLine();
+                    Environment.Exit(0);
+                    break;
+                
+                default:
+                    Console.Error.WriteLine();
+                    Environment.Exit(0);
+                    break;
+            }
+
+            //save the file
+
         }
 
         /// <summary>
@@ -62,9 +112,18 @@ namespace srt_align
         /// </summary>
         static void Help()
         {
-            Console.WriteLine("srt-align [--shift|-linear] [OPTIONS...] <file>\n");
+            Console.WriteLine("srt-align {--shift|--linear} [OPTIONS...] <input> [output]\n");
+            Console.WriteLine("Options:");
             Console.WriteLine("\t-h --help\t\tShow this help");
             Console.WriteLine("\t-v --version\t\tShow package version");
+            Console.WriteLine("\t-s --shift=RATIO\tShifts the timestamp of a file based on a mutiple ratio (floating point value) where 1\n\t\t\t\tmeans no change.");
+            Console.WriteLine("\t-l --linear=TIMESTAMP\tIncrease or decrease the timestamp value of a file based on a timestamp provided. The\n\t\t\t\ttimestamp must be in a valid format for srt file ([-]##:##:##,###)");
+            Console.WriteLine("\t-o --overwrite\t\tTells the program to overwrite the input file that was provided.\n");
+            Console.WriteLine("Input/Output values:");
+            Console.WriteLine("\t<intput>\t\tThe input srt file that must be provided.");
+            Console.WriteLine("\t[output]\t\tThe ouptut file for the srt file after modification. This item is optional. If this\n\t\t\t\tvalue is ommited, the file will be named after the input name with \"-edited\" at the\n\t\t\t\tend. The file will be placed in the input file directory.");
+
+
         }
 
         /// <summary>
@@ -172,7 +231,7 @@ namespace srt_align
                     };
                     break;
 
-                case "override":
+                case "overwrite":
                     param_Override = true;
                     break;
 
@@ -256,12 +315,43 @@ namespace srt_align
                     break;
             }
         }
+
+        /// <summary>
+        /// method that check which 
+        /// </summary>
+        /// <param name="linear">the value in param_linear</param>
+        /// <param name="shift">the value in param_shift</param>
+        /// <returns>returns a character to represent the mode of modification 'l' for linear, 's'. Two error case or present 'n' for none and 'b' for both for shift 'e' for error in any other case</returns>
+        static char ModeSelect(TimeStamp linear, float shift)
+        {
+            char result = 'e';
+
+            if (linear != null && shift == DEFAULT_SHIFT_VALUE)
+            {
+                result = 'l';
+            }
+            else if (linear == null && shift != DEFAULT_SHIFT_VALUE)
+            {
+                result = 's';
+            }
+            else if (linear == null && shift == DEFAULT_SHIFT_VALUE)
+            {
+                result = 'n';
+            }
+            else if (linear != null && shift != DEFAULT_SHIFT_VALUE)
+            {
+                result = 'b';
+            }
+
+            return result;
+        }
     }
+}
 
     /*args list to implement:
         -s && --shift       -> shift correction
         -l && --linear      -> linear correction
-        -o && --override    -> override file
+        -o && --overwrite   -> override file
         -h && --help        -> help file
         -v && --version     -> version check
     */

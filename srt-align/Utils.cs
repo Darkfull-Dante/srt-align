@@ -8,6 +8,11 @@ namespace srt_align
     class Utils
     {
 
+        /// <summary>
+        /// Method that reads an srt file and creates a List of the différent subtitle elements in the file
+        /// </summary>
+        /// <param name="fileLocation">the location of the file</param>
+        /// <returns>a list of all the subtitle element under the form of a class object SubtitleElement</returns>
         static public List<SubtitleElement> SrtRead(string fileLocation)
         {
             string currentLine;
