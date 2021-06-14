@@ -16,6 +16,10 @@ namespace srt_align
 
         const float DEFAULT_SHIFT_VALUE = 99999;
 
+        /// <summary>
+        /// srt-align entry point
+        /// </summary>
+        /// <param name="args">list of arguments provided by user in console</param>
         static void Main(string[] args)
         {
 
@@ -375,6 +379,11 @@ namespace srt_align
             return result;
         }
 
+        /// <summary>
+        /// method to update all timestamp of the .srt file in a linear fashion
+        /// </summary>
+        /// <param name="list">list of subtitle element of the .srt file</param>
+        /// <param name="linearValue">the linear timeshift to apply</param>
         static void LinearUpdate(ref List<SubtitleElement> list, TimeStamp linearValue)
         {
             foreach (SubtitleElement subtitle in list)
@@ -384,6 +393,11 @@ namespace srt_align
             }
         }
 
+        /// <summary>
+        /// method to update all timestamp of the .srt file in a shift fashion
+        /// </summary>
+        /// <param name="list">list of subtitle element of the .srt file</param>
+        /// <param name="shiftValue">the multiple value to apply to the timestamps</param>
         static void ShiftUpdate(ref List<SubtitleElement> list, float shiftValue)
         {
             foreach (SubtitleElement subtitle in list)
