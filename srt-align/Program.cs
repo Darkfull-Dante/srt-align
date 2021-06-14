@@ -42,7 +42,7 @@ namespace srt_align
                     }
                     else
                     {
-                        Console.Error.WriteLine("File provided is invalid. The extension must be a .srt file");
+                        Console.Error.WriteLine("File provided is invalid. The extension must be an .srt file");
                         Environment.Exit(0);
                     }
                 }
