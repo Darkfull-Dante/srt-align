@@ -126,6 +126,9 @@ namespace srt_align
             //save the file
             Utils.SrtWrite(subtitlesList, output);
 
+            //message to confirm the edit worked
+            Console.WriteLine("{0} was edited succesfully. {1} subtitle elements were edited.\n\nThe file is available under {2}", input, subtitlesList.Count, output);
+
         }
 
         /// <summary>
@@ -193,7 +196,7 @@ namespace srt_align
 
             if (paramList == null || paramList.Length == 0)
             {
-                Console.Error.WriteLine("No parameter were provided. Check srt-align --help for detail on how to use the software");
+                Console.Error.WriteLine("No parameter were provided. Check srt-align --help for detail on how to use the software\n");
                 Help();
                 Environment.Exit(0);
             }
