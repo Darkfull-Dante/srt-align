@@ -1,5 +1,3 @@
-*In construction*
-
 # SRT Align
 SRT Align is a CLI software that can edit timestamp in an SRT file (SubRip) to align the timing with the video Source. The tool can help for two types of offset:
 
