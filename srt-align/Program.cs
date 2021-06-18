@@ -137,7 +137,7 @@ namespace srt_align
         /// </summary>
         static void Version()
         {
-            Console.WriteLine("srt-align 0.4");
+            Console.WriteLine("srt-align 0.5");
             Console.WriteLine("Copyright (C) 2021 Felix Cusson");
             Console.WriteLine("Licence GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>");
             Console.WriteLine("This is free software: you are free to change and redistribute it.");
@@ -157,7 +157,7 @@ namespace srt_align
             Console.WriteLine("\t-l --linear=TIMESTAMP\tIncrease or decrease the timestamp value of a file based on a timestamp provided. The\n\t\t\t\ttimestamp must be in a valid format for srt file ([-]##:##:##,###)");
             Console.WriteLine("\t-o --overwrite\t\tTells the program to overwrite the input file that was provided.\n");
             Console.WriteLine("Input/Output values:");
-            Console.WriteLine("\t<intput>\t\tThe input srt file that must be provided.");
+            Console.WriteLine("\t<input>\t\tThe input srt file that must be provided.");
             Console.WriteLine("\t[output]\t\tThe ouptut file for the srt file after modification. This item is optional. If this\n\t\t\t\tvalue is ommited, the file will be named after the input name with \"-edited\" at the\n\t\t\t\tend. The file will be placed in the input file directory.");
 
 
