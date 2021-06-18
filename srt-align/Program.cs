@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Security;
 
 namespace srt_align
 {
@@ -55,13 +56,13 @@ namespace srt_align
             //check the arguments for input and output
             if (removeFromArray == 1)
             {
-                input = FileLocationFormater(args[argsCount - 1]);
-                output = FileLocationFormater(Path.GetFileNameWithoutExtension(input) + "-edited" + Path.GetExtension(input));
+                input = FileLocationFormater(args[argsCount - 1], true);
+                output = FileLocationFormater(Path.GetFileNameWithoutExtension(input) + "-edited" + Path.GetExtension(input), false);
             }
             else if (removeFromArray == 2)
             {
-                input = FileLocationFormater(args[argsCount - 2]);
-                output = FileLocationFormater(args[argsCount - 1]);
+                input = FileLocationFormater(args[argsCount - 2], true);
+                output = FileLocationFormater(args[argsCount - 1], false);
             }
    
             //remove file location from the argument list to prepare for option settings
@@ -167,24 +168,41 @@ namespace srt_align
         /// </summary>
         /// <param name="locationArg">absolute or relative path of the srt file</param>
         /// <returns>returns an absolute path for the file</returns>
-        static string FileLocationFormater(string locationArg)
+        static string FileLocationFormater(string locationArg, bool mustExist)
         {
-            Regex driveLetterTest = new Regex(@"^[a-zA-Z]:\\");
+            string fullPath = "";
 
-            //check if location argument is already an absolute path
-            if (driveLetterTest.IsMatch(locationArg))
+
+            try
             {
-                return locationArg;
+                fullPath = Path.GetFullPath(locationArg);
+
+                
+                if (HasWriteAccessToFolder(fullPath))
+                {
+                    throw new UnauthorizedAccessException(string.Format("Unauthorized access to {0}. Running has administrator may be required.", fullPath));
+                }
+
+                
+            }
+            catch (FileNotFoundException e)
+            {
+
+                if (mustExist)
+                {
+                    Console.Error.WriteLine("{0}", e.Message);
+                    Environment.Exit(0);
+                }
+                
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Console.Error.WriteLine(e.Message);
+                Environment.Exit(0);
             }
 
-            //for a relative path check if a slash is present at the start of the string for correct formatting
-            if (locationArg[0] != '\\')
-            {
-                locationArg = "\\" + locationArg;
-            }
+            return fullPath;
 
-            //Append at the start the current working directory for a relative path
-            return Directory.GetCurrentDirectory() + locationArg;
         }
 
         /// <summary>
@@ -409,9 +427,29 @@ namespace srt_align
                 subtitle.End *= shiftValue;
             }
         }
+
+        /// <summary>
+        /// method to verify if the file provided is accessible to the user
+        /// </summary>
+        /// <param name="folderPath">the path to verify</param>
+        /// <returns></returns>
+        static bool HasWriteAccessToFolder(string filePath)
+        {
+            try
+            {
+                // Attempt to get a list of security permissions from the folder. 
+                // This will raise an exception if the path is read only or do not have access to view the permissions. 
+                File.ReadAllText(filePath);
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+        }
     }
 
-    
+
 }
 
     /*args list to implement:

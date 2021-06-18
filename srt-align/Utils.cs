@@ -21,11 +21,13 @@ namespace srt_align
             int index = 0;
             int subtitleCount = 0;
 
+            /*
             if (!File.Exists(fileLocation))
             {
                 Console.Error.WriteLine("The file provided does not exist");
                 Environment.Exit(0);
             }
+            */
 
             //create the streamReader
             try
