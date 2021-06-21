@@ -137,7 +137,7 @@ namespace srt_align
         /// </summary>
         static void Version()
         {
-            Console.WriteLine("srt-align 0.5");
+            Console.WriteLine("srt-align 0.5.1");
             Console.WriteLine("Copyright (C) 2021 Felix Cusson");
             Console.WriteLine("Licence GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>");
             Console.WriteLine("This is free software: you are free to change and redistribute it.");
@@ -178,9 +178,9 @@ namespace srt_align
                 fullPath = Path.GetFullPath(locationArg);
 
                 
-                if (HasWriteAccessToFolder(fullPath))
+                if (!HasWriteAccessToFolder(fullPath))
                 {
-                    throw new UnauthorizedAccessException(string.Format("Unauthorized access to {0}. Running has administrator may be required.", fullPath));
+                    throw new UnauthorizedAccessException(string.Format("Unauthorized access to {0}.", fullPath));
                 }
 
                 
