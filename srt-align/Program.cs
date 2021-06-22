@@ -14,6 +14,7 @@ namespace srt_align
         static bool param_Overwrite = false;
         static bool param_Version = false;
         static bool param_Help = false;
+        static string VERSION = "0.6.1";
 
         const float DEFAULT_SHIFT_VALUE = 99999;
 
@@ -137,7 +138,7 @@ namespace srt_align
         /// </summary>
         static void Version()
         {
-            Console.WriteLine("srt-align 0.5.1");
+            Console.WriteLine("srt-align " + VERSION);
             Console.WriteLine("Copyright (C) 2021 Felix Cusson");
             Console.WriteLine("Licence GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>");
             Console.WriteLine("This is free software: you are free to change and redistribute it.");

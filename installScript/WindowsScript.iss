@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "srt-align"
-#define MyAppVersion "0.6.0"
+#define MyAppVersion "0.6.1"
 #define MyAppPublisher "DarkfullDante"
 #define MyAppURL "https://github.com/Darkfull-Dante/srt-align"
 #define MyAppExeName "srt-align.exe"
@@ -24,7 +24,8 @@ DisableProgramGroupPage=yes
 LicenseFile=C:\Users\felix\source\repos\srt-align\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
-OutputBaseFilename=srt-align_co
+OutputBaseFilename=srt-align_Setup-{#MyAppVersion}
+OutputDir=C:\Users\felix\source\repos\srt-align\final\Windows_Installer
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -45,12 +46,11 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Registry]
 Root: "HKLM"; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{olddata};{app}"; Check: NeedsAddPath(ExpandConstant('{app}'))
-Root: "HKCU"; Subkey: "Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{olddata};{app}"; Check: NeedsAddPath1(ExpandConstant('{app}'))
 
 [Code]
-function NeedsAddPathHKLM(Param: string): boolean;
+function NeedsAddPath(Param: string): boolean;
 var
-OriginPath: string;
+OrigPath: string;
 begin
 if not RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\Control\Session Manager\Environment', 'Path', OrigPath)
 then begin
