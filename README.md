@@ -5,9 +5,16 @@ SRT Align is a CLI software that can edit timestamp in an SRT file (SubRip) to a
 - **Linear**: when the subtitle is always slightly before or being the video source due to wrong start time
 
 ## Installation
+
+### Windows
 1. Download the most current .exe in the release page
 2. Place it in your folder of choice
 3. Add the location of srt-align.exe to your system environnement path
+
+### Linux
+1. Download to most recent release (file without an extension)
+2. Place it in your folder of choice
+  - Placing the file in /usr/local/bin would let you use the software as a bash command without specifying the location
 
 ## Usage
 
